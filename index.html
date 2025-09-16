@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BBC News Bangla</title>
+
+    <!-- Fav Icon Link -->
+    <link rel="shortcut icon" href="./assets/logo.svg" type="image/x-icon">
+
+    <!-- Google Font Link -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,100..900;1,100..900&display=swap"
+        rel="stylesheet">
+
+    <!-- Tailwind & Daisy Ui CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@5" rel="stylesheet" type="text/css" />
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+
+    <style>
+        * {
+            font-family: "Noto Serif", serif;
+        }
+    </style>
+</head>
+
+<body>
+    <header class="">
+        <div class=" py-4 shadow-sm bg-[#e7000b]">
+            <div class="max-w-7xl mx-auto">
+                <figure class="text-xl cursor-pointer text-start px-10">
+                    <img class="invert" src="./assets/logo.svg" alt="">
+                </figure>
+            </div>
+        </div>
+
+        <nav class="py-5 bg-base-100 shadow-sm ">
+            <div class="max-w-7xl mx-auto">
+                <ul id="categories-container" class="flex flex-wrap gap-10 px-10">
+
+                </ul>
+            </div>
+        </nav>
+    </header>
+    <main class="max-w-7xl mx-auto">
+        <section id="news-container" class="px-5 my-10 grid md:grid-cols-2 lg:grid-cols-3 gap-5">
+
+        </section>
+    </main>
+    <script src="./script.js"></script>
+</body>
+
+</html>
