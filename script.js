@@ -1,12 +1,16 @@
 const categoryContainer = document.getElementById("categories-container");
 categoryContainer.innerHTML = "";
-
 const newsContainer = document.getElementById("news-container");
+
+const modal = document.getElementById("news-modal");
+const modalContent = document.getElementById("modal-content");
+const modalClose = document.getElementById("modal-close");
 
 // 🔹 global bookmark array
 let bookmarks = [];
 
 const loadCategories = () => {
+  showLoading();
   fetch("https://news-api-fs.vercel.app/api/categories")
     .then((res) => res.json())
     .then((data) => {
@@ -42,15 +46,25 @@ const showCategories = (categories) => {
 };
 
 const loadNewsByCategory = (categoryId) => {
+  showLoading();
   const url = `https://news-api-fs.vercel.app/api/categories/${categoryId}`;
   fetch(url)
     .then((res) => res.json())
     .then((data) => {
       showNewsByCategory(data.articles);
+    })
+    .catch((error) => {
+      showError();
+      alert("Something went wrong");
     });
 };
 
 const showNewsByCategory = (articles) => {
+  if (articles.length === 0) {
+    showEmptyMessage();
+    alert("There are no news in This Category");
+    return;
+  }
   newsContainer.innerHTML = "";
 
   articles.forEach((article) => {
@@ -65,18 +79,49 @@ const showNewsByCategory = (articles) => {
                     <h1 class="font-extrabold">${article.title}</h1>
                     <p class="text-sm py-3">${article.time}</p>
                     <button class="book-mark-btn btn">Bookmark</button>
-                    <button class="btn">View Details</button>
+                    <button class="detail-news-btn btn">View Details</button>
                 </div>
             </div>
         </div>      
     `;
     newsContainer.append(newsDiv);
 
-    // 🔹 each card er button handle
+    // 🔹 bookmark
     const bookMarkBtn = newsDiv.querySelector(".book-mark-btn");
     bookMarkBtn.addEventListener("click", () => addToBookMark(article));
+
+    // 🔹 details modal
+    const detailBtn = newsDiv.querySelector(".detail-news-btn");
+    detailBtn.addEventListener("click", () => openModal(article));
   });
 };
+
+// 🔹 open modal
+const openModal = (article) => {
+  modalContent.innerHTML = `
+    <h2 class="text-2xl font-bold mb-3">${article.title}</h2>
+    <img class="w-full h-[200px] object-cover rounded mb-3" src="${
+      article.image.srcset[5].url
+    }" />
+    <p class="text-gray-700 mb-3">${article.time}</p>
+    <p class="text-gray-600">${
+      article.description || "No description available"
+    }</p>
+  `;
+  modal.classList.remove("hidden");
+};
+
+// 🔹 close modal
+modalClose.addEventListener("click", () => {
+  modal.classList.add("hidden");
+});
+
+// 🔹 close when background click
+modal.addEventListener("click", (e) => {
+  if (e.target === modal) {
+    modal.classList.add("hidden");
+  }
+});
 
 // 🔹 add to bookmark
 const addToBookMark = (article) => {
@@ -128,6 +173,34 @@ const showBookmarks = () => {
 const deleteBookmark = (index) => {
   bookmarks.splice(index, 1);
   showBookmarks();
+};
+
+const showLoading = () => {
+  newsContainer.innerHTML = `
+    <div class=" p-5 bg-gray-400">
+        <h1 class="text-xl  text-red-700">Loading.....
+            <span class="loading loading-ring loading-xs"></span>
+            <span class="loading loading-ring loading-sm"></span>
+            <span class="loading loading-ring loading-lg"></span>
+            <span class="loading loading-ring loading-xl"></span>
+      </div>
+  `;
+};
+
+const showError = () => {
+  newsContainer.innerHTML = `
+  <div class="bg-red-500 p-7 rounded text-white text-xl font-semibold">
+    Something went wrong
+  </div>
+  `;
+};
+
+const showEmptyMessage = () => {
+  newsContainer.innerHTML = `
+    <div class="bg-gray-400 rounded-xl p-7 text-red-600 text-xl   font-semibold">
+      No News Found for This category.
+    </div>
+  `;
 };
 
 // initial load
